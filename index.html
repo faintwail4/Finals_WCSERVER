@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UpVote! - Vue 3 Social Voting App</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+
+  <div id="app">
+    <main class="app-container">
+      <header class="app-header">
+        <h1>UpVote!</h1>
+        <p>A reactive submission ranking application</p>
+      </header>
+
+      <section class="form-section">
+        <button class="toggle-form-btn" @click="showForm = !showForm">
+          {{ showForm ? 'Close Form' : '+ Submit New Item' }}
+        </button>
+
+        <form v-if="showForm" @submit.prevent="addSubmission" class="submission-form">
+          <div class="form-group">
+            <input 
+              v-model.trim="newTitle" 
+              type="text" 
+              placeholder="Title (e.g. Mechanical Keyboard)" 
+              required 
+            />
+          </div>
+          <div class="form-group">
+            <input 
+              v-model.trim="newDescription" 
+              type="text" 
+              placeholder="Description" 
+              required 
+            />
+          </div>
+          <div class="form-group">
+            <input 
+              v-model.trim="newAuthor" 
+              type="text" 
+              placeholder="Submitted by (Name)" 
+              required 
+            />
+          </div>
+          <div class="form-group">
+            <input 
+              v-model.trim="newUrl" 
+              type="url" 
+              placeholder="Link URL (e.g. https://example.com)" 
+            />
+          </div>
+          <button type="submit" class="submit-btn">Submit Link</button>
+        </form>
+      </section>
+
+      <section class="submissions-list">
+        <TransitionGroup name="submission-list" tag="div">
+          <submission-item
+            v-for="(submission, index) in sortedSubmissions"
+            :key="submission.id"
+            :submission="submission"
+            :is-top-voted="index === 0"
+            @vote="handleVote"
+          ></submission-item>
+        </TransitionGroup>
+      </section>
+    </main>
+  </div>
+
+  <script src="SubmissionItem.js"></script>
+  <script src="App.js"></script>
+</body>
+</html>
